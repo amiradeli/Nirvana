@@ -13,18 +13,6 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace WorkItemApp
 {
-    public class LogMessage
-    {
-        public string Message { get; set; }
-        public Color Color { get; set; }
-
-        public LogMessage(string message, Color color)
-        {
-            Message = message;
-            Color = color;
-        }
-    }
-
     public partial class MainPage : ContentPage
     {
         private readonly IWorkItemService _workItemService;
@@ -35,6 +23,7 @@ namespace WorkItemApp
         public ObservableCollection<LogMessage> LogMessages { get; } = new();
         public IAsyncRelayCommand AddNewItem { get; }
         public IAsyncRelayCommand<WorkItem> Delete { get; }
+        public IAsyncRelayCommand<WorkItem> Edit { get; }
         public IRelayCommand ClearLogs { get; }
 
         public MainPage(IWorkItemService workItemService, ILogger<MainPage> logger, ILogger<AddWorkItemPage> addPageLogger)
@@ -48,6 +37,7 @@ namespace WorkItemApp
 
             AddNewItem = new AsyncRelayCommand(OnAddItemClicked);
             Delete = new AsyncRelayCommand<WorkItem>(OnDeleteClicked!);
+            Edit = new AsyncRelayCommand<WorkItem>(OnEditClicked!);
             ClearLogs = new RelayCommand(() => LogMessages.Clear());
 
             // Add custom logger provider
@@ -57,6 +47,20 @@ namespace WorkItemApp
             });
             _logger = loggerFactory.CreateLogger<MainPage>();
             _addPageLogger = loggerFactory.CreateLogger<AddWorkItemPage>();
+        }
+
+        private async void OnAddItemButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                _logger.LogInformation("Button clicked - Navigating to Add Work Item page");
+                await Shell.Current.GoToAsync("addworkitem");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error navigating to AddWorkItemPage from button click");
+                await DisplayAlert("Error", "Failed to open add item page", "OK");
+            }
         }
 
         protected override async void OnAppearing()
@@ -99,20 +103,6 @@ namespace WorkItemApp
             }
         }
 
-        private async void OnAddItemButtonClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                _logger.LogInformation("Button clicked - Navigating to Add Work Item page");
-                await Shell.Current.GoToAsync("addworkitem");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error navigating to AddWorkItemPage from button click");
-                await DisplayAlert("Error", "Failed to open add item page", "OK");
-            }
-        }
-
         private async Task OnDeleteClicked(WorkItem item)
         {
             try
@@ -134,6 +124,36 @@ namespace WorkItemApp
                 _logger.LogError(ex, $"Error deleting work item {item.Id}");
                 await DisplayAlert("Error", "Failed to delete work item", "OK");
             }
+        }
+
+        private async Task OnEditClicked(WorkItem item)
+        {
+            try
+            {
+                _logger.LogInformation($"Navigating to edit work item {item.Id}");
+                var navigationParameter = new Dictionary<string, object>
+                {
+                    { "WorkItem", item }
+                };
+                await Shell.Current.GoToAsync("editworkitem", navigationParameter);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error navigating to edit page");
+                await DisplayAlert("Error", "Failed to open edit page", "OK");
+            }
+        }
+    }
+
+    public class LogMessage
+    {
+        public string Message { get; set; }
+        public Color Color { get; set; }
+
+        public LogMessage(string message, Color color)
+        {
+            Message = message;
+            Color = color;
         }
     }
 

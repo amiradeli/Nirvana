@@ -38,5 +38,25 @@ namespace WorkItemAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<WorkItem> UpdateWorkItemAsync(int id, WorkItem workItem)
+        {
+            var existingItem = await _context.WorkItems.FindAsync(id);
+            if (existingItem == null)
+            {
+                throw new KeyNotFoundException($"Work item with ID {id} not found");
+            }
+
+            existingItem.Title = workItem.Title;
+            existingItem.Description = workItem.Description;
+            existingItem.Status = workItem.Status;
+            existingItem.Type = workItem.Type;
+            existingItem.StartDate = workItem.StartDate;
+            existingItem.DueDate = workItem.DueDate;
+            existingItem.EndDate = workItem.EndDate;
+
+            await _context.SaveChangesAsync();
+            return existingItem;
+        }
     }
 } 

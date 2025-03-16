@@ -45,6 +45,7 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<MainPage>();
 		builder.Services.AddTransient<AddWorkItemPage>();
+		builder.Services.AddTransient<EditWorkItemPage>();
 		builder.Services.AddLogging(logging =>
 		{
 			logging.AddDebug();

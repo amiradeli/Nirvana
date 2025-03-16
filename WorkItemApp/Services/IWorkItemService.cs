@@ -19,5 +19,8 @@ namespace WorkItemApp.Services
 
         [Delete("/api/workitem/{id}")]
         Task DeleteWorkItem(int id);
+
+        [Put("/api/workitem/{id}")]
+        Task<WorkItem> UpdateWorkItem(int id, [Body] WorkItem workItem);
     }
 }

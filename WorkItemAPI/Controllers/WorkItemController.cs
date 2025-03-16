@@ -49,6 +49,38 @@ namespace WorkItemAPI.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<WorkItem>> PutWorkItem(int id, [FromBody] WorkItem workItem)
+        {
+            try
+            {
+                _logger.LogInformation("Updating work item {Id}: {@WorkItem}", id, workItem);
+                
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("Invalid model state: {@ModelState}", ModelState);
+                    return BadRequest(ModelState);
+                }
+
+                try
+                {
+                    var updatedItem = await _workItemService.UpdateWorkItemAsync(id, workItem);
+                    _logger.LogInformation("Updated work item: {@UpdatedItem}", updatedItem);
+                    return Ok(updatedItem);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    _logger.LogWarning(ex, "Work item not found");
+                    return NotFound(ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating work item");
+                return StatusCode(500, "An error occurred while updating the work item");
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkItem(int id)
         {

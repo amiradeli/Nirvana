@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace WorkItemApp.Models
 {
@@ -16,5 +17,8 @@ namespace WorkItemApp.Models
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime DueDate { get; set; }
+
+        [JsonIgnore]
+        public bool IsOverdue => DueDate < DateTime.Today;
     }
 }

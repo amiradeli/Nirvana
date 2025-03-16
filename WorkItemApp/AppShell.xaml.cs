@@ -11,6 +11,7 @@
         private void RegisterRoutes()
         {
             Routing.RegisterRoute("addworkitem", typeof(AddWorkItemPage));
+            Routing.RegisterRoute("editworkitem", typeof(EditWorkItemPage));
         }
     }
 }

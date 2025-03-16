@@ -2,9 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:WorkItemApp"
+             xmlns:models="clr-namespace:WorkItemApp.Models"
              x:Class="WorkItemApp.MainPage">
 
     <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:NullableDateVisibilityConverter x:Key="NullableDateVisibilityConverter"/>
+        </ResourceDictionary>
+        
         <Style x:Key="HeaderLabelStyle" TargetType="Label">
             <Setter Property="FontAttributes" Value="Bold" />
             <Setter Property="TextColor" Value="White" />
@@ -36,30 +42,68 @@
         <ScrollView Grid.Row="1">
             <Grid RowDefinitions="Auto,*">
                 <!-- Table Header -->
-                <Grid Grid.Row="0" ColumnDefinitions="2*,3*,*,*,Auto" BackgroundColor="{StaticResource Primary}" Padding="12">
+                <Grid Grid.Row="0" ColumnDefinitions="2*,3*,*,*,2*,Auto" BackgroundColor="{StaticResource Primary}" Padding="12">
                     <Label Text="Title" TextColor="White" FontAttributes="Bold" />
                     <Label Grid.Column="1" Text="Description" TextColor="White" FontAttributes="Bold" />
                     <Label Grid.Column="2" Text="Status" TextColor="White" FontAttributes="Bold" />
                     <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" />
-                    <Label Grid.Column="4" Text="Actions" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="4" Text="Dates (Start/Due/End)" TextColor="White" FontAttributes="Bold" />
+                    <Label Grid.Column="5" Text="Actions" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
                 </Grid>
 
                 <!-- Work Items List -->
                 <CollectionView Grid.Row="1" ItemsSource="{Binding WorkItems}" EmptyView="No work items found. Click 'Add New Item' to create one.">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Padding="12" BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}">
-                                <Grid ColumnDefinitions="2*,3*,*,*,Auto">
+                        <DataTemplate x:DataType="models:WorkItem">
+                            <Grid Padding="10">
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid"
+                                               Binding="{Binding IsOverdue}"
+                                               Value="True">
+                                        <Setter Property="BackgroundColor" Value="#ff0000" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+                                <Grid ColumnDefinitions="2*,3*,*,*,2*,Auto">
                                     <Label Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" LineBreakMode="TailTruncation" />
                                     <Label Grid.Column="1" Text="{Binding Description}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" LineBreakMode="TailTruncation" />
                                     <Label Grid.Column="2" Text="{Binding Status}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
                                     <Label Grid.Column="3" Text="{Binding Type}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
-                                    <Button Grid.Column="4" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.Delete}" 
-                                            CommandParameter="{Binding}" BackgroundColor="#dc3545" TextColor="White" Padding="10,5" HeightRequest="35">
-                                        <Button.Behaviors>
-                                            <mct:IconTintColorBehavior TintColor="White" />
-                                        </Button.Behaviors>
-                                    </Button>
+                                    <VerticalStackLayout Grid.Column="4" Spacing="0">
+                                        <Label Text="{Binding StartDate, StringFormat='S: {0:MM/dd}'}" 
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" 
+                                               FontSize="12"/>
+                                        <Label Text="{Binding DueDate, StringFormat='D: {0:MM/dd}'}" 
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                                               FontSize="12"/>
+                                        <Label Text="{Binding EndDate, StringFormat='E: {0:MM/dd}'}" 
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                                               FontSize="12"
+                                               IsVisible="{Binding EndDate, Converter={StaticResource NullableDateVisibilityConverter}}"/>
+                                    </VerticalStackLayout>
+                                    <HorizontalStackLayout Grid.Column="5" Spacing="5">
+                                        <Button Text="Edit" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.Edit}" 
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="{StaticResource Primary}" 
+                                                TextColor="White" 
+                                                Padding="10,5" 
+                                                HeightRequest="35">
+                                            <Button.Behaviors>
+                                                <mct:IconTintColorBehavior TintColor="White" />
+                                            </Button.Behaviors>
+                                        </Button>
+                                        <Button Text="Delete" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.Delete}" 
+                                                CommandParameter="{Binding}" 
+                                                BackgroundColor="#dc3545" 
+                                                TextColor="White" 
+                                                Padding="10,5" 
+                                                HeightRequest="35">
+                                            <Button.Behaviors>
+                                                <mct:IconTintColorBehavior TintColor="White" />
+                                            </Button.Behaviors>
+                                        </Button>
+                                    </HorizontalStackLayout>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
