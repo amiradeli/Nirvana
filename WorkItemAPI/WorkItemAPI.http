@@ -1,6 +1,6 @@
 @WorkItemAPI_HostAddress = http://localhost:5142
 
-GET {{WorkItemAPI_HostAddress}}/weatherforecast/
+GET {{WorkItemAPI_HostAddress}}/api/workitem/
 Accept: application/json
 
 ###

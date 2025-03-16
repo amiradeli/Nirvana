@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkItemAPI.Models
+namespace WorkItemApp.Models
 {
     public class WorkItem
     {

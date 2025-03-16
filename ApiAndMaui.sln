@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35818.85 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkItemAPI", "WorkItemAPI\WorkItemAPI.csproj", "{A4D74E7E-C6CC-44B5-9FE9-E1EDC710320C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkItemApp", "WorkItemApp\WorkItemApp.csproj", "{D6F75074-82AC-4155-887C-2D63757D38C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{A4D74E7E-C6CC-44B5-9FE9-E1EDC710320C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4D74E7E-C6CC-44B5-9FE9-E1EDC710320C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4D74E7E-C6CC-44B5-9FE9-E1EDC710320C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F75074-82AC-4155-887C-2D63757D38C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F75074-82AC-4155-887C-2D63757D38C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F75074-82AC-4155-887C-2D63757D38C9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D6F75074-82AC-4155-887C-2D63757D38C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F75074-82AC-4155-887C-2D63757D38C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F75074-82AC-4155-887C-2D63757D38C9}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

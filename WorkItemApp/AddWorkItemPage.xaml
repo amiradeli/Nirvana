@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkItemApp.AddWorkItemPage"
+             Title="Add Work Item">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="Title" FontAttributes="Bold"/>
+            <Entry x:Name="TitleEntry" Placeholder="Enter title"/>
+
+            <Label Text="Description" FontAttributes="Bold"/>
+            <Editor x:Name="DescriptionEditor" 
+                    Placeholder="Enter description"
+                    HeightRequest="100"/>
+
+            <Label Text="Status" FontAttributes="Bold"/>
+            <Picker x:Name="StatusPicker"/>
+
+            <Label Text="Type" FontAttributes="Bold"/>
+            <Picker x:Name="TypePicker"/>
+
+            <Label Text="Start Date" FontAttributes="Bold"/>
+            <DatePicker x:Name="StartDatePicker" Format="D"/>
+
+            <Label Text="Due Date" FontAttributes="Bold"/>
+            <DatePicker x:Name="DueDatePicker" Format="D"/>
+
+            <Label Text="End Date" FontAttributes="Bold"/>
+            <DatePicker x:Name="EndDatePicker" Format="D"/>
+
+            <Button Text="Save"
+                    Clicked="OnSaveClicked"
+                    BackgroundColor="DodgerBlue"
+                    TextColor="White"
+                    Margin="0,20,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

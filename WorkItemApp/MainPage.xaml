@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="WorkItemApp.MainPage">
+
+    <ContentPage.Resources>
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="Margin" Value="12" />
+        </Style>
+        
+        <Style x:Key="ContentLabelStyle" TargetType="Label">
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="Margin" Value="12" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+            <Label Text="Work Items" FontSize="32" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+            <Button Grid.Column="1" Text="Add New Item" 
+                    Command="{Binding AddNewItem}"
+                    Clicked="OnAddItemButtonClicked"
+                    BackgroundColor="{StaticResource Primary}" TextColor="White">
+                <Button.Behaviors>
+                    <mct:IconTintColorBehavior TintColor="White" />
+                </Button.Behaviors>
+            </Button>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <Grid RowDefinitions="Auto,*">
+                <!-- Table Header -->
+                <Grid Grid.Row="0" ColumnDefinitions="2*,3*,*,*,Auto" BackgroundColor="{StaticResource Primary}" Padding="12">
+                    <Label Text="Title" TextColor="White" FontAttributes="Bold" />
+                    <Label Grid.Column="1" Text="Description" TextColor="White" FontAttributes="Bold" />
+                    <Label Grid.Column="2" Text="Status" TextColor="White" FontAttributes="Bold" />
+                    <Label Grid.Column="3" Text="Type" TextColor="White" FontAttributes="Bold" />
+                    <Label Grid.Column="4" Text="Actions" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                </Grid>
+
+                <!-- Work Items List -->
+                <CollectionView Grid.Row="1" ItemsSource="{Binding WorkItems}" EmptyView="No work items found. Click 'Add New Item' to create one.">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="12" BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}">
+                                <Grid ColumnDefinitions="2*,3*,*,*,Auto">
+                                    <Label Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" LineBreakMode="TailTruncation" />
+                                    <Label Grid.Column="1" Text="{Binding Description}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" LineBreakMode="TailTruncation" />
+                                    <Label Grid.Column="2" Text="{Binding Status}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Label Grid.Column="3" Text="{Binding Type}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Button Grid.Column="4" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.Delete}" 
+                                            CommandParameter="{Binding}" BackgroundColor="#dc3545" TextColor="White" Padding="10,5" HeightRequest="35">
+                                        <Button.Behaviors>
+                                            <mct:IconTintColorBehavior TintColor="White" />
+                                        </Button.Behaviors>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </ScrollView>
+
+        <!-- Log Display -->
+        <mct:Expander Grid.Row="2" Margin="0,20,0,0">
+            <mct:Expander.Header>
+                <Grid ColumnDefinitions="*,Auto" Padding="12" BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}">
+                    <Label Text="Log Messages" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
+                    <Button Grid.Column="1" Text="Clear" Command="{Binding ClearLogs}" 
+                            BackgroundColor="{StaticResource Primary}" TextColor="White" HeightRequest="35" Padding="10,0"/>
+                </Grid>
+            </mct:Expander.Header>
+            
+            <CollectionView ItemsSource="{Binding LogMessages}" HeightRequest="200" 
+                          BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="12,6">
+                            <Label Text="{Binding Message}" TextColor="{Binding Color}">
+                                <Label.Behaviors>
+                                    <mct:IconTintColorBehavior TintColor="{Binding Color}" />
+                                </Label.Behaviors>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </mct:Expander>
+    </Grid>
+</ContentPage>
